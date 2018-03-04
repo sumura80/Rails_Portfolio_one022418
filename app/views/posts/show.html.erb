@@ -1,0 +1,36 @@
+<h2><%= @post.title%></h2>
+<p><%= @post.body %></p>
+<hr>
+
+<%= link_to "編集", edit_post_path(@post),
+		:class => 'btn btn-default' %>
+<%= link_to "削除する", post_path(@post),
+		method: :delete,
+		data: { confirm: '削除してよろしいですか？'},
+		:class => 'btn btn-danger' %>	
+
+<hr>
+<h3>コメント一覧</h3>	 
+<% @post.comments.each do|comment| %>
+	<div class="well">
+		<p><strong><%= comment.username %></strong>:
+		<%= comment.body %>
+
+<%= link_to "[ 削除 ]", [comment.post, comment],
+		data: { confirm: '削除してよろしいですか？'},
+		method: :delete %></p>
+	</div>
+<% end %>
+
+<%= form_for ([@post, @post.comments.build]) do |f| %>
+ 
+	<p>
+		<%= f.label :username ,"ユーザー名" %><br>
+		<%= f.text_field(:username, {:class => 'form_control'}) %>
+	</p>
+	<p>
+		<%= f.label :body, "コメント内容" %><br>
+		<%= f.text_area(:body,{:class =>'form-control'}) %>
+	</p>
+	<p><%= f.submit "コメント追加", class: "btn btn-primary" %></p>
+<% end %>
